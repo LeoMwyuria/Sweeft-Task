@@ -14,13 +14,14 @@ export const Home = () => {
   const [cache, setCache] = useState<Record<string, Photo[]>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const saveToHistory = (term: string) => {
     const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
     const newHistory = [
       { term, timestamp: Date.now() },
       ...history.filter((item: SearchHistory) => item.term !== term)
-    ].slice(0, 10);
+    ].slice(0, 50);
     localStorage.setItem('searchHistory', JSON.stringify(newHistory));
   };
 
@@ -36,8 +37,11 @@ export const Home = () => {
   }, [inputValue]);
 
   const loadPhotos = useCallback(async () => {
+    if (isLoadingMore) return; 
+    
     try {
       setIsLoading(true);
+      setIsLoadingMore(true);
       
       const newPhotos = query 
         ? await searchPhotos(query, page)
@@ -57,15 +61,16 @@ export const Home = () => {
       console.error('Error loading photos:', error);
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
-  }, [query, page]);
-
+  }, [query, page, isLoadingMore]);
   const { isFetching, setIsFetching } = useInfiniteScroll(loadPhotos);
 
   useEffect(() => {
-    if (!isFetching) return;
+    if (!isFetching || isLoadingMore) return;
     setPage(prevPage => prevPage + 1);
-  }, [isFetching]);
+  }, [isFetching, isLoadingMore]);
+
 
   useEffect(() => {
     if (query.trim()) {
@@ -97,7 +102,6 @@ export const Home = () => {
   return (
     <div className="home">
       <Search onSearch={handleSearch} />
-
       {isLoading && photos.length === 0 && (
         <div className="loading">
           <h3>Loading photos...</h3>

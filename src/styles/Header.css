@@ -1,7 +1,8 @@
 .header {
-    background: rgba(255, 255, 255, 0.1);
+  background: var(--secondary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: 80px;
     backdrop-filter: blur(10px);
-    height: 80px;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -20,7 +21,7 @@
   .logo {
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #fff 0%, #a8b8d8 100%);
+    background: linear-gradient(135deg, #000000 0%, #666666 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -32,7 +33,7 @@
   }
   
   .nav-link {
-    color: white;
+    color: var(--primary-color);
     text-decoration: none;
     font-size: 1.1rem;
     padding: 0.5rem 1rem;
@@ -40,13 +41,13 @@
   }
   
   .nav-link::after {
+    background: var(--primary-color);
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 0;
     height: 2px;
-    background: white;
     transition: width 0.3s ease;
   }
   
