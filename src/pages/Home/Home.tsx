@@ -5,6 +5,7 @@ import { Modal } from '../../components/Modal/Modal';
 import { Search } from '../../components/Search/Search';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { getPopularPhotos, searchPhotos } from '../../services/unsplash';
+import { ScrollToTop } from '../../components/ScrollToTop/ScrollToTop';
 
 export const Home = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -131,6 +132,7 @@ export const Home = () => {
           onClose={() => setSelectedPhoto(null)} 
         />
       )}
+      <ScrollToTop />
     </div>
   );
 };

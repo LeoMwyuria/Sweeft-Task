@@ -5,6 +5,7 @@ import { Photo, SearchHistory } from '../../interfaces';
 import { searchPhotos } from '../../services/unsplash';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { HistorySlider } from '../../components/Sliders/HistorySlider';
+import { ScrollToTop } from '../../components/ScrollToTop/ScrollToTop';
 
 export const History = () => {
   const [selectedTerm, setSelectedTerm] = useState<string>('');
@@ -122,6 +123,8 @@ export const History = () => {
           onClose={() => setSelectedPhoto(null)} 
         />
       )}
+      <ScrollToTop />
     </div>
+    
   );
 };

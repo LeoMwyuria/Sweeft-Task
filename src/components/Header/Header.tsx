@@ -10,11 +10,18 @@ export const Header = () => {
     );
   }, []);
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.reload();
+  };
+
   return (
     <>
       <header id="header" className="header">
         <div className="header-content">
-          <NavLink to="/" className="logo">Photo Gallery</NavLink>
+          <NavLink to="/" className="logo" onClick={handleLogoClick}>
+            Photo Gallery
+          </NavLink>
           <nav className="nav-links">
             <NavLink 
               to="/" 

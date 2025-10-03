@@ -19,6 +19,9 @@
   max-height: 90vh;
   position: relative;
 }
+.modal-image-container{
+  margin-top: 20px;
+}
 
 .modal-content {
   display: flex;
@@ -71,6 +74,10 @@
   cursor: pointer;
   color: #333;
   z-index: 1;
+}
+.close-button img{
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 768px) {
