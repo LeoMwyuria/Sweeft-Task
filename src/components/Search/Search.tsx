@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
-import gsap from 'gsap';
+import { animateSearchFocus } from '../../animations/searchAnimations';
 import searchIcon from '../../assets/search.png';
-
-interface SearchProps {
-  onSearch: (value: string) => void;
-}
+import { SearchProps } from '../../interfaces';
 
 export const Search = ({ onSearch }: SearchProps) => {
   const [isActive, setIsActive] = useState(false);
@@ -13,20 +10,12 @@ export const Search = ({ onSearch }: SearchProps) => {
 
   const handleFocus = () => {
     setIsActive(true);
-    gsap.to(wrapperRef.current, {
-      scale: 1.1,
-      duration: 0.3,
-      ease: "power2.out"
-    });
+    animateSearchFocus(wrapperRef, true);
   };
 
   const handleBlur = () => {
     setIsActive(false);
-    gsap.to(wrapperRef.current, {
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out"
-    });
+    animateSearchFocus(wrapperRef, false);
   };
 
   return (

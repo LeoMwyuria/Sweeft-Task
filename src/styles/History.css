@@ -124,9 +124,8 @@
 @media (max-width: 767px) {
   .history-slider-container {
     width: 90%;
-    padding: 20px;
+    padding: 20px 10px;
   }
-
   .desktop-slider {
     display: none;
   }
@@ -135,6 +134,7 @@
     display: block;
     position: relative;
     width: 100%;
+    margin: 0 auto;
   }
 
   .dropdown-trigger {
@@ -152,7 +152,7 @@
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -189,11 +189,5 @@
   .dropdown-item .timestamp {
     margin-left: 12px;
     flex-shrink: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .history-slider-container {
-    width: 95%;
   }
 }

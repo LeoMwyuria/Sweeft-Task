@@ -1,22 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
-import gsap from 'gsap';
+import { animateScrollButton } from '../../animations/scrollToTopAnimations';
 
 export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const shouldBeVisible = scrollTop > 300;
-      
+      const shouldBeVisible = window.scrollY > 300;
       if (shouldBeVisible !== isVisible) {
         setIsVisible(shouldBeVisible);
-        gsap.to(buttonRef.current, {
-          opacity: shouldBeVisible ? 1 : 0,
-          duration: 0.3,
-          ease: 'power2.out'
-        });
+        animateScrollButton(buttonRef, shouldBeVisible);
       }
     };
 

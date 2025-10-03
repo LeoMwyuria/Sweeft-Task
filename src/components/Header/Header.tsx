@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
-import gsap from 'gsap';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { animateHeader } from '../../animations/headerAnimations';
 
 export const Header = () => {
+  const location = useLocation();
+
   useEffect(() => {
-    gsap.fromTo("#header", 
-      { y: -50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
-    );
+    animateHeader();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location]);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();

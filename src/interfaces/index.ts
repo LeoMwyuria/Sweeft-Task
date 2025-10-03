@@ -18,7 +18,31 @@ export interface Photo {
 }
 
 
-  export interface SearchHistory {
+export interface SearchHistory {
     term: string;
     timestamp: number;
   }
+
+
+export interface HistorySliderProps {
+    items: SearchHistory[];
+    selectedTerm: string;
+    onTermClick: (term: string) => void;
+  }
+
+  export interface ModalProps {
+  photo: Photo;
+  onClose: () => void;
+}
+
+export interface PhotoStats {
+  views: number;
+  downloads: number;
+}
+export interface PhotoGridProps {
+  photos: Photo[];
+  onPhotoClick: (photo: Photo) => void;
+}
+export interface SearchProps {
+  onSearch: (value: string) => void;
+}

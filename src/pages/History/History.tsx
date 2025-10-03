@@ -4,8 +4,9 @@ import { Modal } from '../../components/Modal/Modal';
 import { Photo, SearchHistory } from '../../interfaces';
 import { searchPhotos } from '../../services/unsplash';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
-import { HistorySlider } from '../../components/Sliders/HistorySlider';
+import { HistorySlider } from '../../components/HistorySlider/HistorySlider';
 import { ScrollToTop } from '../../components/ScrollToTop/ScrollToTop';
+import { usePhotoCache } from '../../hooks/usePhotoCache';
 
 export const History = () => {
   const [selectedTerm, setSelectedTerm] = useState<string>('');
@@ -14,43 +15,31 @@ export const History = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
-  const [cache, setCache] = useState<Record<string, Photo[]>>(() => {
-    const savedCache = localStorage.getItem('photoCache');
-    return savedCache ? JSON.parse(savedCache) : {};
-  });
+  const { cache, updateCache } = usePhotoCache();
 
   const loadPhotos = async () => {
     if (!selectedTerm) return;
-    
+
     try {
       const newPhotos = await searchPhotos(selectedTerm, page);
-      setPhotos(prev => page === 1 ? newPhotos : [...prev, ...newPhotos]);
+      setPhotos(prev => [...prev, ...newPhotos]);
       setPage(prev => prev + 1);
-      
-      if (!cache[selectedTerm]) {
-        const updatedCache = {
-          ...cache,
-          [selectedTerm]: newPhotos
-        };
-        setCache(updatedCache);
-        localStorage.setItem('photoCache', JSON.stringify(updatedCache));
-      }
+      updateCache(selectedTerm, [...(cache[selectedTerm] || []), ...newPhotos]);
     } catch (error) {
       console.error('Error loading photos:', error);
     } finally {
       setIsInitialLoading(false);
+      setIsFetching(false);
     }
   };
-
   const { isFetching, setIsFetching } = useInfiniteScroll(loadPhotos);
 
   useEffect(() => {
     const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
     setSearchHistory(history);
     if (history.length > 0) {
-      const mostRecentTerm = history[0].term;
-      setSelectedTerm(mostRecentTerm);
-      handleTermClick(mostRecentTerm);
+      setSelectedTerm(history[0].term);
+      handleTermClick(history[0].term);
     }
   }, []);
 
@@ -62,28 +51,24 @@ export const History = () => {
   const handleTermClick = (term: string) => {
     setSelectedTerm(term);
     setPage(1);
-    
+    setIsFetching(false);
+
     if (cache[term]) {
       setIsInitialLoading(false);
       setPhotos(cache[term]);
       return;
     }
-    
+
     setIsInitialLoading(true);
     setPhotos([]);
-    
+
     searchPhotos(term, 1).then(newPhotos => {
       setPhotos(newPhotos);
       setIsInitialLoading(false);
-      
-      const updatedCache = {
-        ...cache,
-        [term]: newPhotos
-      };
-      setCache(updatedCache);
-      localStorage.setItem('photoCache', JSON.stringify(updatedCache));
+      updateCache(term, newPhotos);
     });
   };
+
 
   return (
     <div className="history">
@@ -125,6 +110,5 @@ export const History = () => {
       )}
       <ScrollToTop />
     </div>
-    
   );
 };
