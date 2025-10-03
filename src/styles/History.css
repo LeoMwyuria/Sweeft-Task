@@ -91,6 +91,14 @@
 .mobile-dropdown {
   display: none;
 }
+.history-term {
+  padding: 20px 30px;
+  font-size: 1rem;
+}
+
+.timestamp {
+  font-size: 0.8rem;
+}
 
 @media (max-width: 1400px) {
   .history-slider {
