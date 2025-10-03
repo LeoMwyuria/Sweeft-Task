@@ -37,26 +37,29 @@ export const Home = () => {
   }, [inputValue]);
 
   const loadPhotos = useCallback(async () => {
-    if (isLoadingMore) return; 
-    
+    if (isLoadingMore) return;
+  
     try {
       setIsLoading(true);
       setIsLoadingMore(true);
-      
+  
       const newPhotos = query 
         ? await searchPhotos(query, page)
         : await getPopularPhotos(page);
-      
-      if (query) {
-        setCache(prev => ({
-          ...prev,
-          [query]: page === 1 
-            ? newPhotos 
-            : [...(prev[query] || []), ...newPhotos]
-        }));
-      }
-
-      setPhotos(prev => page === 1 ? newPhotos : [...prev, ...newPhotos]);
+  
+      setCache(prev => ({
+        ...prev,
+        [query]: page === 1 
+          ? newPhotos 
+          : [...(prev[query] || []), ...newPhotos]
+      }));
+  
+      setPhotos(prev => {
+        const mergedPhotos = page === 1 ? newPhotos : [...prev, ...newPhotos];
+        const uniquePhotos = Array.from(new Map(mergedPhotos.map(p => [p.id, p])).values());
+        return uniquePhotos;
+      });
+  
     } catch (error) {
       console.error('Error loading photos:', error);
     } finally {
@@ -64,6 +67,8 @@ export const Home = () => {
       setIsLoadingMore(false);
     }
   }, [query, page, isLoadingMore]);
+  
+
   const { isFetching, setIsFetching } = useInfiniteScroll(loadPhotos);
 
   useEffect(() => {
@@ -71,9 +76,9 @@ export const Home = () => {
     setPage(prevPage => prevPage + 1);
   }, [isFetching, isLoadingMore]);
 
-
   useEffect(() => {
     if (query.trim()) {
+      setPage(1);
       if (cache[query]) {
         setPhotos(cache[query]);
       } else {

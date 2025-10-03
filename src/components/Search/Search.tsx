@@ -1,5 +1,6 @@
-import { useRef,  useState } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
+import searchIcon from '../../assets/search.png';
 
 interface SearchProps {
   onSearch: (value: string) => void;
@@ -30,6 +31,11 @@ export const Search = ({ onSearch }: SearchProps) => {
 
   return (
     <div className={`search-wrapper ${isActive ? 'active' : ''}`} ref={wrapperRef}>
+      <img 
+        src={searchIcon} 
+        alt="search" 
+        className="search-icon"
+      />
       <input 
         ref={inputRef}
         type="text"

@@ -68,39 +68,35 @@ export const Modal = ({ photo, onClose }: ModalProps) => {
 
   return (
     <div className="modal-overlay" ref={overlayRef} onClick={handleClose}>
-      <div className="modal-container" ref={contentRef} onClick={e => e.stopPropagation()}>
-        <button className="close-button" onClick={handleClose}>×</button>
-        <div className="modal-content">
-          <div className="modal-image">
-            <img 
-              src={photo.urls.regular} 
-              alt={photo.alt_description || 'Photo'} 
-              style={{ 
-                maxHeight: '80vh', 
-                maxWidth: '90vw',
-                objectFit: 'contain' 
-              }}
-            />
-          </div>
-          <div className="modal-info">
-            <h3>By {photo.user.name}</h3>
-            <div className="stats">
-              <div className="stat">
-                <img src={likeIcon} alt="likes" className="stat-icon" />
-                <span>{photo.likes}</span>
-              </div>
-              <div className="stat">
-                <img src={viewIcon} alt="views" className="stat-icon" />
-                <span>{photoStats.views}</span>
-              </div>
-              <div className="stat">
-                <img src={downloadIcon} alt="downloads" className="stat-icon" />
-                <span>{photoStats.downloads}</span>
-              </div>
+    <div className="modal-container" ref={contentRef} onClick={e => e.stopPropagation()}>
+      <button className="close-button" onClick={handleClose}>×</button>
+      <div className="modal-content">
+        <div className="modal-image-container">
+          <img 
+            src={photo.urls.regular} 
+            alt={photo.alt_description || 'Photo'} 
+            className="modal-image"
+          />
+        </div>
+        <div className="modal-info">
+          <h3>By {photo.user.name}</h3>
+          <div className="stats">
+            <div className="stat">
+              <img src={likeIcon} alt="likes" className="stat-icon" />
+              <span>{photo.likes}</span>
+            </div>
+            <div className="stat">
+              <img src={viewIcon} alt="views" className="stat-icon" />
+              <span>{photoStats.views}</span>
+            </div>
+            <div className="stat">
+              <img src={downloadIcon} alt="downloads" className="stat-icon" />
+              <span>{photoStats.downloads}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
   );
 };
