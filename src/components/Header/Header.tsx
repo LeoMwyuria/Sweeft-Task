@@ -1,13 +1,37 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import gsap from 'gsap';
 
 export const Header = () => {
+  useEffect(() => {
+    gsap.fromTo("#header", 
+      { y: -50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+    );
+  }, []);
+
   return (
-    <div className="app">
-      <nav className="navigation">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/history">History</NavLink>
-      </nav>
+    <>
+      <header id="header" className="header">
+        <div className="header-content">
+          <h1 className="logo">Photo Gallery</h1>
+          <nav className="nav-links">
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            >
+              Gallery
+            </NavLink>
+            <NavLink 
+              to="/history" 
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            >
+              History
+            </NavLink>
+          </nav>
+        </div>
+      </header>
       <Outlet />
-    </div>
+    </>
   );
 };

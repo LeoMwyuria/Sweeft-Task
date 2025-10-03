@@ -13,39 +13,6 @@ body {
   color: white;
   min-height: 100vh;
 }
-
-.glass-effect {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--blur-amount));
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-}
-  
-  .navigation {
-    background: white;
-    padding: 1rem 2rem;
-    box-shadow: var(--shadow);
-    display: flex;
-    gap: 2rem;
-  }
-  
-  .navigation a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-  }
-  
-  .navigation a:hover {
-    background-color: #dfe6e9;
-  }
-  
-  .navigation a.active {
-    background-color: var(--primary-color);
-    color: white;
-  }
   .no-results {
     text-align: center;
     padding: 3rem;
@@ -56,3 +23,20 @@ body {
     max-width: 500px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+  ::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(53, 53, 53, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+  background: rgba(53, 53, 53, 0.3);
+}

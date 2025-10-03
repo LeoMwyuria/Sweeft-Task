@@ -5,6 +5,7 @@ import './styles/Home.css'
 import './styles/Modal.css'
 import './styles/PhotoGrid.css'
 import './styles/global.css'
+import './styles/Header.css'
 import { router } from './routes/Routes.tsx'
 import { RouterProvider } from 'react-router-dom'
 createRoot(document.getElementById('root')!).render(

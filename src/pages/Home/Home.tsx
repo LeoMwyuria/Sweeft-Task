@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Photo, SearchHistory } from '../../interfaces';
 import { PhotoGrid } from '../../components/PhotoGrid/PhotoGrid';
 import { Modal } from '../../components/Modal/Modal';
@@ -13,6 +13,7 @@ export const Home = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [cache, setCache] = useState<Record<string, Photo[]>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const saveToHistory = (term: string) => {
     const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
@@ -20,26 +21,38 @@ export const Home = () => {
       { term, timestamp: Date.now() },
       ...history.filter((item: SearchHistory) => item.term !== term)
     ].slice(0, 10);
-    
     localStorage.setItem('searchHistory', JSON.stringify(newHistory));
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputValue.trim()) {
+        setQuery(inputValue);
+        saveToHistory(inputValue);
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
 
   const loadPhotos = useCallback(async () => {
     try {
       setIsLoading(true);
+      
       const newPhotos = query 
         ? await searchPhotos(query, page)
         : await getPopularPhotos(page);
       
-      setPhotos(prev => [...prev, ...newPhotos]);
-      setPage(prev => prev + 1);
-      
       if (query) {
         setCache(prev => ({
           ...prev,
-          [query]: [...(prev[query] || []), ...newPhotos]
+          [query]: page === 1 
+            ? newPhotos 
+            : [...(prev[query] || []), ...newPhotos]
         }));
       }
+
+      setPhotos(prev => page === 1 ? newPhotos : [...prev, ...newPhotos]);
     } catch (error) {
       console.error('Error loading photos:', error);
     } finally {
@@ -50,21 +63,18 @@ export const Home = () => {
   const { isFetching, setIsFetching } = useInfiniteScroll(loadPhotos);
 
   useEffect(() => {
-    loadPhotos();
-  }, []);
-
-  useEffect(() => {
     if (!isFetching) return;
-    setIsFetching(false);
-  }, [photos, isFetching, setIsFetching]);
+    setPage(prevPage => prevPage + 1);
+  }, [isFetching]);
 
   useEffect(() => {
     if (query.trim()) {
-      saveToHistory(query.trim());
-    }
-    
-    if (cache[query]) {
-      setPhotos(cache[query]);
+      if (cache[query]) {
+        setPhotos(cache[query]);
+      } else {
+        setPhotos([]);
+        loadPhotos();
+      }
     } else {
       setPhotos([]);
       setPage(1);
@@ -72,8 +82,16 @@ export const Home = () => {
     }
   }, [query]);
 
+  useEffect(() => {
+    if (!isFetching) return;
+    setIsFetching(false);
+  }, [photos]);
+
   const handleSearch = (value: string) => {
-    setQuery(value);
+    setInputValue(value);
+    if (!value.trim()) {
+      setQuery('');
+    }
   };
 
   return (
