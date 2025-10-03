@@ -1,50 +1,46 @@
-# React + TypeScript + Vite
+# Photo Gallery
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A dynamic and visually appealing photo gallery application built with React, featuring infinite scroll, real-time search, and smooth animations.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔄 **Infinite Scroll** – Seamless photo loading as you scroll.
+- 🔍 **Real-time Search** – Find images instantly with live search.
+- 🕘 **Search History Tracking** – Keep track of past searches.
+- 🖼️ **Responsive Modal View** – View photos in a stylish modal with detailed statistics.
+- 🎞️ **GSAP Animations** – Smooth and elegant animations for an enhanced user experience.
+- 📱 **Fully Responsive Design** – Works flawlessly on all screen sizes.
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React** – Component-based UI development.
+- **TypeScript** – Ensuring type safety.
+- **GSAP** – High-performance animations.
+- **Unsplash API** – Fetching stunning images.
+- **CSS3** – Styling and layout.
 
-- Configure the top-level `parserOptions` property like this:
+## ⚡ Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Follow these steps to set up the project locally:
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/LeoMwyuria/Sweeft-React-Project.git
+cd Sweeft-React-Project
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### 3️⃣ Set Up Environment Variables
+Create a `.env` file in the root directory and add your Unsplash API key:
+```env
+VITE_UNSPLASH_ACCESS_KEY=your_api_key_here
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### 4️⃣ Start the Development Server
+```bash
+npm run dev
 ```
