@@ -21,15 +21,17 @@ export const History = () => {
     
     try {
       const newPhotos = await searchPhotos(selectedTerm, page);
-      setPhotos(prev => [...prev, ...newPhotos]);
+      setPhotos(prev => page === 1 ? newPhotos : [...prev, ...newPhotos]);
       setPage(prev => prev + 1);
       
-      const updatedCache = {
-        ...cache,
-        [selectedTerm]: [...(cache[selectedTerm] || []), ...newPhotos]
-      };
-      setCache(updatedCache);
-      localStorage.setItem('photoCache', JSON.stringify(updatedCache));
+      if (!cache[selectedTerm]) {
+        const updatedCache = {
+          ...cache,
+          [selectedTerm]: newPhotos
+        };
+        setCache(updatedCache);
+        localStorage.setItem('photoCache', JSON.stringify(updatedCache));
+      }
     } catch (error) {
       console.error('Error loading photos:', error);
     }
@@ -52,7 +54,7 @@ export const History = () => {
     setPage(1);
     
     if (cache[term]) {
-      setPhotos(cache[term]);
+      setPhotos([...cache[term]]);
     } else {
       setPhotos([]);
       loadPhotos();

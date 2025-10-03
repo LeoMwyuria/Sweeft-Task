@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Photo, SearchHistory } from '../../interfaces';
 import { PhotoGrid } from '../../components/PhotoGrid/PhotoGrid';
 import { Modal } from '../../components/Modal/Modal';
+import { Search } from '../../components/Search/Search';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { getPopularPhotos, searchPhotos } from '../../services/unsplash';
 
@@ -11,7 +12,7 @@ export const Home = () => {
   const [query, setQuery] = useState('');
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [cache, setCache] = useState<Record<string, Photo[]>>({});
-  const searchTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveToHistory = (term: string) => {
     const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
@@ -25,6 +26,7 @@ export const Home = () => {
 
   const loadPhotos = useCallback(async () => {
     try {
+      setIsLoading(true);
       const newPhotos = query 
         ? await searchPhotos(query, page)
         : await getPopularPhotos(page);
@@ -40,10 +42,16 @@ export const Home = () => {
       }
     } catch (error) {
       console.error('Error loading photos:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [query, page]);
 
   const { isFetching, setIsFetching } = useInfiniteScroll(loadPhotos);
+
+  useEffect(() => {
+    loadPhotos();
+  }, []);
 
   useEffect(() => {
     if (!isFetching) return;
@@ -64,30 +72,26 @@ export const Home = () => {
     }
   }, [query]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    clearTimeout(searchTimeout.current);
-    searchTimeout.current = setTimeout(() => {
-      setQuery(value);
-    }, 500);
+  const handleSearch = (value: string) => {
+    setQuery(value);
   };
 
   return (
     <div className="home">
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search photos..."
-          onChange={handleSearch}
-          className="search-input"
-        />
-      </div>
-      {photos.length === 0 && query && (
-  <div className="no-results">
-    <h3>No photos found for "{query}"</h3>
-    <p>Try searching with different keywords</p>
-  </div>
-)}
+      <Search onSearch={handleSearch} />
+
+      {isLoading && photos.length === 0 && (
+        <div className="loading">
+          <h3>Loading photos...</h3>
+        </div>
+      )}
+      
+      {photos.length === 0 && query && !isLoading && (
+        <div className="no-results">
+          <h3>No photos found for "{query}"</h3>
+          <p>Try searching with different keywords</p>
+        </div>
+      )}
       
       <PhotoGrid 
         photos={photos} 
