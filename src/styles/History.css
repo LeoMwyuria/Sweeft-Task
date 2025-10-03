@@ -1,0 +1,42 @@
+.history {
+    padding: 2rem;
+  }
+  
+  .history-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+  }
+  
+  .history-term {
+    background: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .history-term:hover {
+    transform: translateY(-2px);
+  }
+  
+  .history-term.active {
+    background: #2d3436;
+    color: white;
+  }
+  
+  .timestamp {
+    font-size: 0.8rem;
+    color: #636e72;
+  }
+  
+  .active .timestamp {
+    color: #b2bec3;
+  }

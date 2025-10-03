@@ -1,0 +1,22 @@
+.home {
+    padding: 2rem;
+  }
+  
+  .search-container {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: border-color 0.3s;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #2d3436;
+  }
